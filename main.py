@@ -48,7 +48,7 @@ humi = 45
 
 while True:
     collect_data = {'temperature': temp, 'humidity': humi}
-    temp += 0.1
-    humi += 0.1
+    temp += 1
+    humi += 1
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
     time.sleep(10)
