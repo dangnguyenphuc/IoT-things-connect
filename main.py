@@ -78,13 +78,16 @@ client.on_message = recv_message
 
 temp = 35
 humi = 45
+latlong = gmaps.scrape()
+latitude = latlong[0]
+longitude = latlong[1]
 
 while True:
-    latlong = gmaps.scrape()
-    latitude = latlong[0]
-    longitude = latlong[1]
     collect_data = {'temperature': temp, 'humidity': humi,
                     'latitude':latitude,'longitude':longitude}
+    latlong1 = gmaps.scrape()
+    latitude = latlong1[0]
+    longitude = latlong1[1]
     temp += 1
     humi += 1
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
