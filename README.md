@@ -6,3 +6,6 @@ Update main.py
 
 
 #Update 1: correct "+=0.1" to "+=1"
+
+#Update 2: adding GGMaps class to scraping latitude and longitude of gg map by Selenium webdriver(Chromedriver) 
+
