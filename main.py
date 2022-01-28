@@ -1,7 +1,40 @@
 print("Hello ThingsBoard")
 import paho.mqtt.client as mqttclient
-import time
 import json
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+import re
+
+
+class GGMaps:
+    def __init__(self,url):
+        self.driver = webdriver.Chrome()
+        self.driver.get(url)
+        time.sleep(20)
+    def getlatlng(self, cur_url):
+        try:
+            coords = re.search(r"@?\d{1,3}?\.\d{4,8},?\d{1,3}?\.\d{4,8},13z", cur_url).group()
+            coord = coords.split('@')[1]
+
+            lat = float(coord.split(',')[0])
+
+            long = float(coord.split(',')[1])
+            return [lat,long]
+        except:
+            return (-1000,-1000)
+    def scrape(self):
+            button = self.driver.find_element(By.XPATH,'//*[@id="mylocation"]')
+            button.click()
+            time.sleep(20)
+
+            coords = self.getlatlng(self.driver.current_url)
+            return [coords[0],coords[1]]
+
+url = "https://www.google.com/maps"
+gmaps = GGMaps(url)
+
+
 
 BROKER_ADDRESS = "demo.thingsboard.io"
 PORT = 1883
@@ -47,8 +80,13 @@ temp = 35
 humi = 45
 
 while True:
-    collect_data = {'temperature': temp, 'humidity': humi}
+    latlong = gmaps.scrape()
+    latitude = latlong[0]
+    longitude = latlong[1]
+    collect_data = {'temperature': temp, 'humidity': humi,
+                    'latitude':latitude,'longitude':longitude}
     temp += 1
     humi += 1
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
     time.sleep(10)
+
