@@ -9,3 +9,5 @@ Update main.py
 
 #Update 2: adding GGMaps class to scraping latitude and longitude of gg map by Selenium webdriver(Chromedriver) 
 
+#Update 3: add initial value for latitude and longitude.
+
